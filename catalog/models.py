@@ -5,6 +5,8 @@ from django.db import models
 from django.urls import reverse  # Used to generate urls by reversing the URL patterns
 
 
+from django.contrib.auth.models import User
+
 class Genre(models.Model):
     """
     Model representing a book genre (e.g. Science Fiction, Non Fiction).
@@ -104,7 +106,7 @@ class BookInstance(models.Model):
         ordering = ["due_back"]
         permissions = (("can_mark_returned", "Set book as returned"),)
 
-    def __str__(self):
+def __str__(self):
         """
         String for representing the Model object.
         """

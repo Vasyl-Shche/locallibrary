@@ -38,7 +38,7 @@ class BookListView(generic.ListView):
     Generic class-based view for a list of books.
     """
     model = Book
-    paginate_by = 2
+    paginate_by = 4
 
 
 class BookDetailView(generic.DetailView):
@@ -46,7 +46,7 @@ class BookDetailView(generic.DetailView):
     Generic class-based detail view for a book.
     """
     model = Book
-    paginate_by = 2
+    paginate_by = 4
 
 
 class AuthorListView(generic.ListView):
@@ -62,3 +62,18 @@ class AuthorDetailView(generic.DetailView):
     Generic class-based detail view for an author.
     """
     model = Author
+
+
+from django.contrib.auth.mixins import LoginRequiredMixin
+
+
+class LoanedBooksByUserListView(LoginRequiredMixin, generic.ListView):
+    """
+    Generic class-based view listing books on loan to current user.
+    """
+    model = BookInstance
+    template_name = 'catalog/bookinstance_list_borrowed_user.html'
+    paginate_by = 10
+
+    def get_queryset(self):
+        return BookInstance.objects.filter(borrower=self.request.user).filter(status__exact='o').order_by('due_back')
